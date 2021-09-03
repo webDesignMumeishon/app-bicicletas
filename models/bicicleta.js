@@ -38,8 +38,8 @@ Bicicleta.removeById = function (aBiciId){
     return Bicicleta.allBicis = Bicicleta.allBicis.filter( bici => bici.id !== aBiciId)
 }
 
-let a = new Bicicleta(1, "rojo", "urbana", [-34.60, -58.38])
-let b = new Bicicleta(2, "azul", "campestres", [-31.60, -50.38])
+let a = new Bicicleta(1, "rojo", "urbana", [-27.46056, -58.98389])
+let b = new Bicicleta(2, "azul", "campestres", [-27.36708, -55.89608])
 
 
 Bicicleta.add(a)

@@ -1,6 +1,5 @@
 //Desde controllers se maneja todo lo que tiene que ver con bicicletas
 
-
 let Bicicleta = require('../models/bicicleta.js')
 
 exports.bicicleta_list = function(req,res){
