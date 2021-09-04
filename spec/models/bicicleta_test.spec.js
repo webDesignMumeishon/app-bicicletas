@@ -2,21 +2,22 @@ let Bicicleta = require('../../models/bicicleta')
 let mongoose = require('mongoose')
 
 describe('Testing Bicicletas', function(){
-    beforeEach((done) => {
+    beforeEach(function(done){
         let mongoDB = 'mongodb://localhost/testdb'
         mongoose.connect(mongoDB, {useNewUrlParser: true})
 
         const db = mongoose.connection;
         db.on('error', console.error.bind(console, 'connection error'))
-        db.once('open', () => {
+        db.once('open', function() {
             console.log("We are connected to test database")
             done()
         })
     })
 
-    afterEach((done) => {
-        Bicicleta.deleteMany({}, (err, succes) => {
+    afterEach(function(done){
+        Bicicleta.deleteMany({}, function(err, succes){
             if(err) console.log(err)
+            mongoose.disconnect(err); 
             done()
         })
     })
@@ -24,12 +25,66 @@ describe('Testing Bicicletas', function(){
     describe('Bicicleta.createInstance', () => {
         it('crea una instancia de Bicicleta', () => {
             let bici = Bicicleta.createInstance(1, "verde", "urbana", [-45, -58])
-            console.log(bici)
+            // console.log(bici)
             expect(bici.code).toBe(1)
             expect(bici.color).toBe("verde")
             expect(bici.modelo).toBe("urbana")
             expect(bici.ubicacion[0]).toEqual(-45)
             expect(bici.ubicacion[1]).toEqual(-58)
+        })
+    })
+
+    describe('Bicicleta.allBicis', () => {
+        it('comienza vacia', (done) => {
+            Bicicleta.allBicis(function(err, bicis){
+                expect(bicis.length).toBe(0);
+                done();
+            })
+        })
+    })
+
+    describe('Bicicleta.add', () => {
+        it('agrega una sola bici', (done) => {
+            let aBici = new Bicicleta({code: 1, color:"verde", modelo: "urbana"})
+            Bicicleta.add(aBici, function(err, newBici){
+                if(err) console.log(err)
+                Bicicleta.allBicis(function(err, bicis){
+                    expect(bicis.length).toEqual(1)
+                    expect(bicis[0].code).toEqual(aBici.code)
+
+                    done()
+                })
+            })
+        })
+    })
+
+    describe('Bicicleta.findbyCode', () => {
+        it('debe devolver la bici con el code 1', (done) => {
+
+            Bicicleta.allBicis(function(err, bicis){
+                expect(bicis.length).toBe(0)
+
+
+
+                let aBici = new Bicicleta({code: 1, color:"verde", modelo: "urbana"})
+                Bicicleta.add(aBici, function(err, newBici){
+                    if(err) console.log(err)
+
+                    let aBici2 = new Bicicleta({code: 2, color:"rojo", modelo: "campestre"})
+
+                    Bicicleta.add(aBici2, function(err, newBici){
+                        if(err) console.log(err)
+                        Bicicleta.findByCode(1, function(err, targetBici){
+                            expect(targetBici.code).toBe(aBici.code)
+                            expect(targetBici.color).toBe(aBici.color)
+                            expect(targetBici.modelo).toBe(aBici.modelo)
+
+                            done()
+                        })
+                    })
+                })
+            })
+  
         })
     })
 })
