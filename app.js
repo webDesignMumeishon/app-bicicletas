@@ -14,6 +14,16 @@ var bicicletasAPIRouter = require('./routes/api/bicicletas');
 
 var app = express();
 
+//importing mongoose
+let mongoose = require('mongoose')
+//This is to establish the connection
+let mongoDB = 'mongodb://localhost/red_bicicletas'
+//Setting up the db
+mongoose.connect(mongoDB, {useNewUrlParser: true})
+mongoose.Promise= global.Promise
+let db = mongoose.connection
+db.on('error', console.error.bind(console, 'MongoDN connection error'))
+
 // view engine setup. In views directory all the templates are set
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
