@@ -36,8 +36,9 @@ describe('Testing Bicicletas', function(){
 
     describe('Bicicleta.allBicis', () => {
         it('comienza vacia', (done) => {
-            Bicicleta.allBicis(function(err, bicis){
-                expect(bicis.length).toBe(0);
+            Bicicleta.allBicis()
+            .then(allBicis => {
+                expect(allBicis.length).toBe(0);
                 done();
             })
         })
@@ -46,44 +47,78 @@ describe('Testing Bicicletas', function(){
     describe('Bicicleta.add', () => {
         it('agrega una sola bici', (done) => {
             let aBici = new Bicicleta({code: 1, color:"verde", modelo: "urbana"})
-            Bicicleta.add(aBici, function(err, newBici){
-                if(err) console.log(err)
-                Bicicleta.allBicis(function(err, bicis){
-                    expect(bicis.length).toEqual(1)
-                    expect(bicis[0].code).toEqual(aBici.code)
-
-                    done()
-                })
+            
+            Bicicleta.add(aBici)
+            .then(() => {
+                return Bicicleta.allBicis()
             })
+            .then(allBicisResult => {
+                expect(allBicisResult.length).toEqual(1)
+                expect(allBicisResult[0].code).toEqual(aBici.code)
+                done()
+            })
+
+            // CALLBACK HERE APPROACH
+            // let aBici = new Bicicleta({code: 1, color:"verde", modelo: "urbana"})
+            // Bicicleta.add(aBici, function(err, newBici){
+            //     if(err) console.log(err)
+            //     Bicicleta.allBicis(function(err, bicis){
+            //         expect(bicis.length).toEqual(1)
+            //         expect(bicis[0].code).toEqual(aBici.code)
+
+            //         done()
+            //     })
+            // })
         })
     })
 
     describe('Bicicleta.findbyCode', () => {
         it('debe devolver la bici con el code 1', (done) => {
 
-            Bicicleta.allBicis(function(err, bicis){
-                expect(bicis.length).toBe(0)
+            let aBici = new Bicicleta({code: 1, color:"verde", modelo: "urbana"})
+            let aBici2 = new Bicicleta({code: 2, color:"rojo", modelo: "campestre"})
 
-
-
-                let aBici = new Bicicleta({code: 1, color:"verde", modelo: "urbana"})
-                Bicicleta.add(aBici, function(err, newBici){
-                    if(err) console.log(err)
-
-                    let aBici2 = new Bicicleta({code: 2, color:"rojo", modelo: "campestre"})
-
-                    Bicicleta.add(aBici2, function(err, newBici){
-                        if(err) console.log(err)
-                        Bicicleta.findByCode(1, function(err, targetBici){
-                            expect(targetBici.code).toBe(aBici.code)
-                            expect(targetBici.color).toBe(aBici.color)
-                            expect(targetBici.modelo).toBe(aBici.modelo)
-
-                            done()
-                        })
-                    })
-                })
+            Bicicleta.allBicis()
+            .then(allBicis => {
+                expect(allBicis.length).toBe(0);
             })
+            .then(() => {
+                return Bicicleta.add(aBici)
+            })
+            .then((aBiciResult) => {
+                return Bicicleta.add(aBici2)
+            })
+            .then(() => {
+                return Bicicleta.findByCode(1)
+            })
+            .then((resultFind) => {
+                expect(resultFind.code).toBe(aBici.code)
+                expect(resultFind.color).toBe(aBici.color)
+                expect(resultFind.modelo).toBe(aBici.modelo)
+                done()
+            })
+
+
+            // Bicicleta.allBicis(function(err, bicis){
+            //     expect(bicis.length).toBe(0)
+            //     let aBici = new Bicicleta({code: 1, color:"verde", modelo: "urbana"})
+            //     Bicicleta.add(aBici, function(err, newBici){
+            //         if(err) console.log(err)
+
+            //         let aBici2 = new Bicicleta({code: 2, color:"rojo", modelo: "campestre"})
+
+            //         Bicicleta.add(aBici2, function(err, newBici){
+            //             if(err) console.log(err)
+            //             Bicicleta.findByCode(1, function(err, targetBici){
+            //                 expect(targetBici.code).toBe(aBici.code)
+            //                 expect(targetBici.color).toBe(aBici.color)
+            //                 expect(targetBici.modelo).toBe(aBici.modelo)
+
+            //                 done()
+            //             })
+            //         })
+            //     })
+            // })
   
         })
     })

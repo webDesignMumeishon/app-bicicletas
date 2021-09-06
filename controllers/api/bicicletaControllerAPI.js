@@ -1,14 +1,16 @@
 const Bicicleta = require('../../models/bicicleta')
 
 exports.bicicleta_list = function(req, res){
-    res.status(200).json({
-        bicicletas: Bicicleta.allBicis
+    Bicicleta.allBicis()
+    .then(allBicis => {
+        res.status(200).json({
+            bicicletas: allBicis
+        })
     })
 }
 
 exports.bicicleta_create = function(req,res){
-    let bici = new Bicicleta(Number(req.body.id), req.body.color, req.body.modelo)
-    bici.ubicacion = [req.body.lat, req.body.lng]
+    let bici = Bicicleta.createInstance(req.body.code, req.body.color, req.body.modelo, [req.body.lat, req.body.lng])
     Bicicleta.add(bici)
 
     res.status(200).json({

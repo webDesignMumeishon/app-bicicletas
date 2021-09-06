@@ -21,7 +21,9 @@ bicicletaSchema.statics.createInstance = function(code, color, modelo, ubicacion
 }
 
 bicicletaSchema.statics.allBicis = function(cb){
-    return this.find({}, cb);
+    // return this.find({}, cb);
+    return this.find({});
+
 }
 
 bicicletaSchema.method.toString = function(){
@@ -29,11 +31,13 @@ bicicletaSchema.method.toString = function(){
 }
 
 bicicletaSchema.statics.add = function(aBici, cb){
-    this.create(aBici, cb)
+    // this.create(aBici, cb) //original
+    return this.create(aBici)
 }
 
 bicicletaSchema.statics.findByCode = function(aCode, cb){
-    return this.findOne({code: aCode}, cb)
+    // return this.findOne({code: aCode}, cb)
+    return this.findOne({code: aCode})
 }
 
 bicicletaSchema.statics.removeByCode = function(aCode, cb){
