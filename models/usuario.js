@@ -1,5 +1,6 @@
 let mongoose = require('mongoose')
 let Reserva = require('./reserva')
+const uniqueValidator = require('mongoose-unique-validator')
 let Schema = mongoose.Schema
 
 const bcrypt = require('bcrypt')
@@ -27,6 +28,8 @@ let usuarioSchema = new Schema({
         //in the method property we pass in the arguments, first the function to validate the input, and then 
         // an invalid massage
         validate: [validateEmail, 'Please, insert a valid email'],
+        //the db can only have one user associated to an email (npm i mongoose-unique-validator --save)
+        unique: true,
         //match, whaever input has to match this sequence, it runs in the mondoDB level
         match: [/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/]
     },
