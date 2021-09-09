@@ -16,6 +16,7 @@ let usuariosRouter = require('./routes/usuario')
 let tokenRouter = require('./routes/token.js')
 const passport = require('./config/passport')
 const session = require('express-session')
+const Usuario = require('./models/usuario')
 // const MongoDBStore = require('connect-mongodb-session')(session);
 
 const store = new session.MemoryStore
@@ -76,11 +77,21 @@ app.get('logout', function(req, res){
 })
 
 app.get('/forgotPassword', function(req, res){
-
+  res.render('session/forgotPassword');
 })
 
 app.post('/forgotPassword', function(req, res){
   
+  Usuario.findOne({ email: req.body.email }, function (err, usuario) {
+    if (!usuario) return res.render('session/forgotPassword', {info: {message: 'No existe el usuario'}});
+ 
+    usuario.resetPassword(function(err){
+      if (err) return next(err);
+      console.log('session/forgotPasswordMessage');
+    });
+
+    res.render('session/forgotPasswordMessage');
+  });
 })
 
 //Setting middlewares for specific paths

@@ -8,9 +8,9 @@ let bicicletaController = require('../controllers/bicicleta.js')
 router.get('/', bicicletaController.bicicleta_list)
 // |--------------------------------------------------------------------------------------------------------------|
 //This goes to the form to update a new bike
-router.get('/:id/update', bicicletaController.bicicleta_update_get)
+router.get('/:code/update', bicicletaController.bicicleta_update_get)
 //This updates the bike with the post verb
-router.post('/:id/update', bicicletaController.bicicleta_update_post)
+router.post('/:code/update', bicicletaController.bicicleta_update_post)
 // |--------------------------------------------------------------------------------------------------------------|
 //This goes to the form to create a new bike
 router.get('/create', bicicletaController.bicicleta_create_get)

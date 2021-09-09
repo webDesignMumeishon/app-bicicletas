@@ -20,6 +20,12 @@ bicicletaSchema.statics.createInstance = function(code, color, modelo, ubicacion
     })
 }
 
+bicicletaSchema.statics.findAndUpdate = function(code, update){
+    return this.findOneAndUpdate(code, update, {
+        new: true
+    })
+} 
+
 bicicletaSchema.statics.allBicis = function(cb){
     // return this.find({}, cb);
     return this.find({});

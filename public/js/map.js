@@ -14,8 +14,8 @@ fetch('http://localhost:3000/api/bicicletas')
 .then(res => res.json())
 .then(data => {
     data.bicicletas.forEach((bicicleta) => {
-        L.marker(bicicleta.ubicacion, {title: bicicleta.id}).addTo(map)
-        .bindPopup(`Bicicleta ID: ${bicicleta.id}`)
+        L.marker(bicicleta.ubicacion, {title: bicicleta.code}).addTo(map)
+        .bindPopup(`Bicicleta ID: ${bicicleta.code}`)
         .openPopup();
     })
 })

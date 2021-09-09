@@ -7,6 +7,7 @@ exports.bicicleta_list = function(req,res){
     //Se hace una nueva lista. Esta es la lista de la tabla de las bicicletas
     Bicicleta.allBicis()
     .then(resultBicis => {
+        console.log(resultBicis)
         res.render('bicicletas/index', {bicis: resultBicis})
     })
 
@@ -22,29 +23,34 @@ exports.bicicleta_create_get = function(req,res){
 
 exports.bicicleta_create_post = function(req,res){
     // 2-confirmacion del create, atributos definidos en el formulario, creacion de la bicicleta
-    let bici = Bicicleta.createInstance(req.body.id, req.body.color, req.body.modelo, [Number(req.body.lat), Number(req.body.lng)])
+    let bici = Bicicleta.createInstance(req.body.code, req.body.color, req.body.modelo, [Number(req.body.lat), Number(req.body.lng)])
     Bicicleta.add(bici)
     res.redirect('/bicicletas')
 }
 // |--------------------------------------------------------------------------------------------------------------|
 exports.bicicleta_update_get = function(req,res){
-    const {id} = req.params
-    let bici = Bicicleta.findById(Number(id))
-    res.render('bicicletas/update', {bici})
+    const {code} = req.params
+    Bicicleta.findByCode(code)
+    .then(foundBici => {
+        console.log(foundBici)
+        res.render('bicicletas/update', {foundBici})
+    })
 }
 
 exports.bicicleta_update_post = function(req,res){
-    let idParams = req.params.id
-    let bike = Bicicleta.findById(Number(idParams)) 
 
-    const {id, color, modelo, lat, lng} = req.body
+    let {code} = req.params.code
+    let update = {
+        code: req.body.code,
+        color: req.body.color,
+        modelo: req.body.modelo,
+        ubicacion: [req.body.lat, req.body.lng]
+    }
 
-    bike.id = Number(id)
-    bike.color = color
-    bike.modelo = modelo
-    bike.ubicacion = [lat, lng]
-    
-    res.redirect('/bicicletas')
+    Bicicleta.findAndUpdate(code, update)
+    .then(() => {
+        res.redirect('/bicicletas')
+    })
 }
 // |--------------------------------------------------------------------------------------------------------------|
 exports.bicicleta_delete_post = function (req, res){
