@@ -40,8 +40,8 @@ bicicletaSchema.statics.findByCode = function(aCode, cb){
     return this.findOne({code: aCode})
 }
 
-bicicletaSchema.statics.removeByCode = function(aCode, cb){
-    return this.deleteOne({code: aCode}, cb)
+bicicletaSchema.statics.removeByCode = function(aCode){
+    return this.deleteOne({code: aCode})
 }
 
 module.exports = mongoose.model('Bicicleta', bicicletaSchema)

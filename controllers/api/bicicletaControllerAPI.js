@@ -10,7 +10,7 @@ exports.bicicleta_list = function(req, res){
 }
 
 exports.bicicleta_create = function(req,res){
-    let bici = Bicicleta.createInstance(req.body.code, req.body.color, req.body.modelo, [req.body.lat, req.body.lng])
+    let bici = Bicicleta.createInstance(req.body.code, req.body.color, req.body.modelo, [Number(req.body.lat), Number(req.body.lng)])
     Bicicleta.add(bici)
 
     res.status(200).json({

@@ -5,8 +5,10 @@ let Bicicleta = require('../models/bicicleta.js')
 exports.bicicleta_list = function(req,res){
     //Aqui se renderiza la vista del listado de bicicletas con el objeto de Bicicleta.allBicis
     //Se hace una nueva lista. Esta es la lista de la tabla de las bicicletas
-
-    res.render('bicicletas/index', {bicis: Bicicleta.allBicis})
+    Bicicleta.allBicis()
+    .then(resultBicis => {
+        res.render('bicicletas/index', {bicis: resultBicis})
+    })
 
     //El render busca al motor de templating de vistas (pug). Dentro de views una carpeta "bicicletas" 
     //y dentro de bicicletas la vista index.pug ---------> se define una tabla
@@ -20,12 +22,8 @@ exports.bicicleta_create_get = function(req,res){
 
 exports.bicicleta_create_post = function(req,res){
     // 2-confirmacion del create, atributos definidos en el formulario, creacion de la bicicleta
-
-    let bici = new Bicicleta(Number(req.body.id), req.body.color, req.body.modelo)
-    bici.ubicacion = [req.body.lat, req.body.lng]
-    
+    let bici = Bicicleta.createInstance(req.body.id, req.body.color, req.body.modelo, [Number(req.body.lat), Number(req.body.lng)])
     Bicicleta.add(bici)
-
     res.redirect('/bicicletas')
 }
 // |--------------------------------------------------------------------------------------------------------------|
@@ -50,9 +48,7 @@ exports.bicicleta_update_post = function(req,res){
 }
 // |--------------------------------------------------------------------------------------------------------------|
 exports.bicicleta_delete_post = function (req, res){
-    const {id} = req.body
-
-    Bicicleta.removeById(Number(id));
-
-    res.redirect("/bicicletas")
+    const {code} = req.body
+    Bicicleta.removeByCode(code)
+    .then(() => {res.redirect("/bicicletas")} )
 }

@@ -8,3 +8,5 @@ const TokenSchema = new Schema({
     //when the expiration is reach mongo detecs it and remove the entire document
     createdAt: {type: Date, required: true, default: Date.now, expires: 43200}
 })
+
+module.exports = mongoose.model("Token", TokenSchema)
