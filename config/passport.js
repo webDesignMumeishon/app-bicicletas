@@ -8,8 +8,6 @@ passport.use(new localStrategy(
             if(err) return done(err)
             if(!usuario) return done(null, false, {message: 'Invalid Email'})
             if(!usuario.validPassword(password)) return done(null, false, {message: 'Invalid password'})
-
-
             return done(null,usuario)
         })
     }
@@ -19,10 +17,17 @@ passport.serializeUser(function(user, cb){
     cb(null, user.id)
 })
 
-passport.deserializeUser(function(id, cb){
-    Usuario.findById(id, function(err, usuario){
-        cb(err, usuario)
-    })
-})
+
+//from internet
+passport.deserializeUser((_id, done) => {
+
+    User.findById( _id, (err, user) => {
+      if(err){
+          done(null, false, {error:err});
+      } else {
+          done(null, user);
+      }
+    });
+});
 
 module.exports= passport
